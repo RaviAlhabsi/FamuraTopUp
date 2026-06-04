@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <!-- ═══ Meta Tags ═══ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Top-up game cepat dan murah di FamuraTopUp. Proses otomatis, pembayaran mudah via QRIS, E-Wallet, dan Transfer Bank.">
+  <title>Top Up — FamuraTopUp</title>
+
+  <!-- ═══ Tailwind CSS via CDN ═══ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dark: { 900: '#0F1119', 800: '#141722', 700: '#1A1D2E', 600: '#242838', 500: '#2A2E3F' },
+            accent: { orange: '#F97316', 'orange-light': '#FB923C', blue: '#3B82F6', 'blue-light': '#60A5FA' }
+          },
+          fontFamily: { 'inter': ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- ═══ Custom CSS ═══ -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- ═══ Favicon ═══ -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F97316'/><text x='16' y='22' text-anchor='middle' font-size='18' font-weight='bold' fill='white'>F</text></svg>">
+</head>
+
+<body class="font-inter">
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  NAVBAR — Same as homepage                              -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <nav id="navbar" class="navbar fixed top-0 left-0 right-0">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 text-white font-bold text-lg no-underline">
+        <svg viewBox="0 0 32 32" class="w-8 h-8">
+          <rect width="32" height="32" rx="8" fill="#F97316"/>
+          <text x="16" y="22" text-anchor="middle" font-size="18" font-weight="bold" fill="white">F</text>
+        </svg>
+        <span>Famura<span class="text-orange-400">TopUp</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-6">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="cek-transaksi.html" class="nav-link">Cek Transaksi</a>
+        <a href="index.html#katalog" class="nav-link">Daftar Harga</a>
+        <a href="#" class="nav-link">Masuk</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="p-2 rounded-lg hover:bg-white/5 transition-all md:hidden" aria-label="Kembali">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  MAIN CONTENT — Order Flow                              -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <main class="pt-16 pb-28 sm:pb-12">
+    <div class="max-w-2xl mx-auto px-4 py-6 space-y-4">
+
+      <!-- ─── Game Header ─────────────────────────────────── -->
+      <div id="game-header" class="animate-fade-in-up" style="opacity:0">
+        <!-- Rendered by JS -->
+        <div class="skeleton h-32 w-full rounded-2xl"></div>
+      </div>
+
+
+      <!-- ═════════════════════════════════════════════════ -->
+      <!--  STEP 1: Masukkan Data Akun                       -->
+      <!-- ═════════════════════════════════════════════════ -->
+      <div id="step-1" class="step-section animate-fade-in-up stagger-1" style="opacity:0">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="step-badge">1</span>
+          <h2 class="step-title">Masukkan Data Akun</h2>
+        </div>
+        <div id="account-fields" class="space-y-3">
+          <!-- Rendered by JS based on game.fields -->
+          <div class="skeleton h-12 w-full rounded-lg"></div>
+          <div class="skeleton h-12 w-full rounded-lg"></div>
+        </div>
+      </div>
+
+
+      <!-- ═════════════════════════════════════════════════ -->
+      <!--  STEP 2: Pilih Nominal                             -->
+      <!-- ═════════════════════════════════════════════════ -->
+      <div id="step-2" class="step-section animate-fade-in-up stagger-2" style="opacity:0">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="step-badge">2</span>
+          <h2 class="step-title">Pilih Nominal</h2>
+        </div>
+
+        <!-- Sub-category tabs (for items with multiple categories) -->
+        <div id="nominal-tabs" class="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-1">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Nominal Grid -->
+        <div id="nominal-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <!-- Rendered by JS -->
+          <div class="skeleton h-20 w-full rounded-lg"></div>
+          <div class="skeleton h-20 w-full rounded-lg"></div>
+          <div class="skeleton h-20 w-full rounded-lg"></div>
+          <div class="skeleton h-20 w-full rounded-lg"></div>
+        </div>
+      </div>
+
+
+      <!-- ═════════════════════════════════════════════════ -->
+      <!--  STEP 3: Pilih Metode Pembayaran                   -->
+      <!-- ═════════════════════════════════════════════════ -->
+      <div id="step-3" class="step-section animate-fade-in-up stagger-3" style="opacity:0">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="step-badge">3</span>
+          <h2 class="step-title">Pilih Pembayaran</h2>
+        </div>
+        <div id="payment-methods">
+          <!-- Rendered by JS -->
+          <div class="skeleton h-14 w-full rounded-lg mb-2"></div>
+          <div class="skeleton h-14 w-full rounded-lg mb-2"></div>
+          <div class="skeleton h-14 w-full rounded-lg mb-2"></div>
+        </div>
+      </div>
+
+
+      <!-- ═════════════════════════════════════════════════ -->
+      <!--  STEP 4: Kode Promo (Optional)                     -->
+      <!-- ═════════════════════════════════════════════════ -->
+      <div id="step-4" class="step-section animate-fade-in-up stagger-4" style="opacity:0">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="step-badge">4</span>
+          <h2 class="step-title">Kode Promo</h2>
+          <span class="text-xs text-gray-500">(Opsional)</span>
+        </div>
+        <div class="flex gap-2">
+          <input id="promo-input" type="text" class="form-input flex-1" placeholder="Masukkan kode promo" style="text-transform: uppercase;">
+          <button id="promo-btn" class="btn-secondary whitespace-nowrap">Gunakan</button>
+        </div>
+        <div id="promo-result" class="mt-2"></div>
+        <div class="info-box mt-3">
+          <span>💡</span>
+          <span>Coba kode: <strong class="text-orange-400">FAMURA10</strong> untuk diskon 10%</span>
+        </div>
+      </div>
+
+
+      <!-- ═════════════════════════════════════════════════ -->
+      <!--  STEP 5: Detail Kontak                              -->
+      <!-- ═════════════════════════════════════════════════ -->
+      <div id="step-5" class="step-section animate-fade-in-up stagger-5" style="opacity:0">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="step-badge">5</span>
+          <h2 class="step-title">Nomor WhatsApp</h2>
+        </div>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">+62</span>
+          <input id="wa-input" type="tel" class="form-input pl-12" placeholder="8xxxxxxxxxx" maxlength="13">
+        </div>
+        <p class="text-xs text-gray-500 mt-2">📩 Invoice dan bukti pembayaran akan dikirim ke nomor ini.</p>
+      </div>
+
+
+      <!-- ═════════════════════════════════════════════════ -->
+      <!--  BUY BUTTON — Desktop (visible on sm+)             -->
+      <!-- ═════════════════════════════════════════════════ -->
+      <div class="hidden sm:block animate-fade-in-up stagger-6" style="opacity:0">
+        <button id="buy-btn" class="btn-primary w-full py-4 text-lg" disabled>
+          🛒 Beli Sekarang
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  STICKY BOTTOM BAR — Mobile Only                        -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="sticky-bar" class="sticky-bottom sm:hidden">
+    <div class="flex items-center justify-between mb-2">
+      <div>
+        <div id="sticky-item-name" class="text-sm font-semibold text-white">Pilih item</div>
+        <div id="sticky-total" class="text-lg font-bold gradient-text">Rp 0</div>
+      </div>
+      <button id="buy-btn-sticky" class="btn-primary px-6 py-3" disabled>
+        🛒 Beli
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  CONFIRMATION MODAL                                     -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="modal" class="modal-backdrop">
+    <div id="modal-body" class="modal-content">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+
+  <!-- ═══ Scripts ═══ -->
+  <script src="js/data.js"></script>
+  <script src="js/order.js"></script>
+
+  <!-- Shared navbar scroll effect -->
+  <script>
+    // Navbar scroll effect (reuse from app.js)
+    const navbar = document.getElementById("navbar");
+    if (navbar) {
+      window.addEventListener("scroll", () => {
+        navbar.classList.toggle("scrolled", window.scrollY > 20);
+      }, { passive: true });
+    }
+  </script>
+
+</body>
+</html>
