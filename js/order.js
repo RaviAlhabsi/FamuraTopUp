@@ -595,11 +595,11 @@ async function processOrder() {
   }
 
   // Save to Supabase if user is logged in
-  if (window.supabase) {
+  if (typeof supabaseClient !== 'undefined' && supabaseClient) {
     try {
-      const { data: { session } } = await window.supabase.auth.getSession();
+      const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
-        await window.supabase.from("transactions").insert([{
+        await supabaseClient.from("transactions").insert([{
           user_id: session.user.id,
           invoice: invoiceNum,
           game: state.game.name,
@@ -620,8 +620,8 @@ async function processOrder() {
     showToast("Mengarahkan ke halaman pembayaran...", "info");
     
     // Redirect to riwayat if logged in
-    if (window.supabase) {
-      const { data: { session } } = await window.supabase.auth.getSession();
+    if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+      const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         window.location.href = "riwayat.html";
       }

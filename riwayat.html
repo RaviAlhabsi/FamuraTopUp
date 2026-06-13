@@ -29,7 +29,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F97316'/><text x='16' y='22' text-anchor='middle' font-size='18' font-weight='bold' fill='white'>F</text></svg>">
   
   <!-- Supabase Script -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase-js.min.js"></script>
 </head>
 
 <body class="font-inter">
@@ -153,7 +153,7 @@
       const tbody = document.getElementById("riwayat-table-body");
 
       try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from("transactions")
           .select("*")
           .eq("user_id", userId)

@@ -2,7 +2,7 @@
  * ============================================================
  *  FamuraTopUp — Supabase Client & Auth Logic (supabase-client.js)
  *  Memerlukan CDN script Supabase di HTML:
- *  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ *  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase-js.min.js"></script>
  * ============================================================
  */
 
@@ -10,22 +10,39 @@
 const SUPABASE_URL = "https://ysepkpsdbtmnknfzghjo.supabase.co"; 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZXBrcHNkYnRtbmtuZnpnaGpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzQ2MTQsImV4cCI6MjA5NjkxMDYxNH0.BOtIHKg1GUJPXdOjtd-C0uDaNb1I5O80xv5SrEt6YM4";
 
-// Inisialisasi Supabase
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Inisialisasi Supabase dengan error handling
+let supabaseClient = null;
+
+try {
+  if (window.supabase && window.supabase.createClient) {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } else {
+    console.error("Supabase SDK belum dimuat! Pastikan CDN script sudah ditambahkan sebelum file ini.");
+  }
+} catch (e) {
+  console.error("Gagal inisialisasi Supabase:", e);
+}
 
 /**
  * Mendapatkan User saat ini (jika sudah login)
  */
 async function getCurrentUser() {
-  const { data: { session } } = await supabase.auth.getSession();
-  return session ? session.user : null;
+  if (!supabaseClient) return null;
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    return session ? session.user : null;
+  } catch (e) {
+    console.error("Gagal mendapatkan session:", e);
+    return null;
+  }
 }
 
 /**
  * Register
  */
 async function signUp(email, password) {
-  const { data, error } = await supabase.auth.signUp({
+  if (!supabaseClient) return { data: null, error: { message: "Supabase belum siap. Coba muat ulang halaman." } };
+  const { data, error } = await supabaseClient.auth.signUp({
     email: email,
     password: password,
   });
@@ -36,7 +53,8 @@ async function signUp(email, password) {
  * Login
  */
 async function signIn(email, password) {
-  const { data, error } = await supabase.auth.signInWithPassword({
+  if (!supabaseClient) return { data: null, error: { message: "Supabase belum siap. Coba muat ulang halaman." } };
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
     email: email,
     password: password,
   });
@@ -47,7 +65,8 @@ async function signIn(email, password) {
  * Logout
  */
 async function signOut() {
-  const { error } = await supabase.auth.signOut();
+  if (!supabaseClient) return;
+  const { error } = await supabaseClient.auth.signOut();
   if (!error) {
     window.location.reload();
   }
@@ -58,7 +77,7 @@ async function signOut() {
  */
 async function initAuthUI() {
   const user = await getCurrentUser();
-  const navLinks = document.querySelectorAll(".nav-link"); // Mencari semua link
+  const navLinks = document.querySelectorAll(".nav-link");
   
   // Mencari elemen "Masuk" di desktop
   const desktopLoginBtn = Array.from(navLinks).find(el => el.textContent.trim().toLowerCase() === "masuk" || el.textContent.trim().toLowerCase() === "profil / riwayat");
@@ -69,7 +88,6 @@ async function initAuthUI() {
       desktopLoginBtn.textContent = "Profil / Riwayat";
       desktopLoginBtn.href = "riwayat.html";
       
-      // Tambahkan tombol logout
       if (!document.getElementById("logout-btn-desktop")) {
         const logoutBtn = document.createElement("a");
         logoutBtn.href = "#";
@@ -94,7 +112,6 @@ async function initAuthUI() {
       mobileLoginBtn.innerHTML = "👤 Profil / Riwayat";
       mobileLoginBtn.href = "riwayat.html";
       
-      // Tambah tombol keluar mobile
       if (!document.getElementById("logout-btn-mobile")) {
         const logoutBtn = document.createElement("a");
         logoutBtn.href = "#";
