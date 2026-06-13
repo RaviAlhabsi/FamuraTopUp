@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Masuk atau Daftar ke akun FamuraTopUp untuk mengelola transaksi.">
+  <title>Masuk / Daftar — FamuraTopUp</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dark: { 900: '#0F1119', 800: '#141722', 700: '#1A1D2E', 600: '#242838', 500: '#2A2E3F' },
+            accent: { orange: '#F97316', 'orange-light': '#FB923C', blue: '#3B82F6', 'blue-light': '#60A5FA' }
+          },
+          fontFamily: { 'inter': ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F97316'/><text x='16' y='22' text-anchor='middle' font-size='18' font-weight='bold' fill='white'>F</text></svg>">
+  
+  <!-- Supabase Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body class="font-inter min-h-screen flex flex-col items-center justify-center relative px-4" style="background-image: radial-gradient(circle at top right, rgba(249,115,22,0.1), transparent 40%), radial-gradient(circle at bottom left, rgba(59,130,246,0.1), transparent 40%);">
+
+  <!-- Logo (Back to home) -->
+  <a href="index.html" class="absolute top-6 left-6 flex items-center gap-2 text-white font-bold text-lg no-underline hover:opacity-80 transition-opacity">
+    <svg viewBox="0 0 32 32" class="w-8 h-8">
+      <rect width="32" height="32" rx="8" fill="#F97316"/>
+      <text x="16" y="22" text-anchor="middle" font-size="18" font-weight="bold" fill="white">F</text>
+    </svg>
+    <span>Famura<span class="text-orange-400">TopUp</span></span>
+  </a>
+
+  <!-- Auth Box -->
+  <div class="glass w-full max-w-md p-8 rounded-2xl animate-fade-in-up">
+    <!-- Tabs -->
+    <div class="flex gap-4 mb-8 border-b border-gray-700/50 pb-2">
+      <button id="tab-login" class="flex-1 font-semibold text-center pb-2 border-b-2 border-orange-400 text-white transition-all">Masuk</button>
+      <button id="tab-register" class="flex-1 font-semibold text-center pb-2 border-b-2 border-transparent text-gray-500 hover:text-gray-300 transition-all">Daftar</button>
+    </div>
+
+    <!-- Form Container -->
+    <form id="auth-form" class="space-y-5">
+      <div id="error-msg" class="hidden p-3 rounded-lg bg-red-500/20 text-red-400 text-sm border border-red-500/30 text-center"></div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">✉️</span>
+          <input id="email" type="email" class="form-input pl-12" placeholder="contoh@email.com" required>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">🔒</span>
+          <input id="password" type="password" class="form-input pl-12" placeholder="••••••••" required minlength="6">
+        </div>
+      </div>
+
+      <button type="submit" id="submit-btn" class="btn-primary w-full justify-center py-3 text-base mt-2 relative overflow-hidden">
+        <span id="btn-text">Masuk</span>
+        <div id="btn-loading" class="hidden absolute inset-0 bg-orange-500 flex items-center justify-center">
+          <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </button>
+    </form>
+  </div>
+
+  <script src="js/supabase-client.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Jika sudah login, lempar ke beranda
+      const user = await getCurrentUser();
+      if (user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      const tabLogin = document.getElementById("tab-login");
+      const tabRegister = document.getElementById("tab-register");
+      const btnText = document.getElementById("btn-text");
+      const errorMsg = document.getElementById("error-msg");
+      const form = document.getElementById("auth-form");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const btnLoading = document.getElementById("btn-loading");
+
+      let isLoginMode = true;
+
+      function setMode(login) {
+        isLoginMode = login;
+        errorMsg.classList.add("hidden");
+        if (login) {
+          tabLogin.classList.replace("border-transparent", "border-orange-400");
+          tabLogin.classList.replace("text-gray-500", "text-white");
+          tabRegister.classList.replace("border-orange-400", "border-transparent");
+          tabRegister.classList.replace("text-white", "text-gray-500");
+          btnText.textContent = "Masuk";
+        } else {
+          tabRegister.classList.replace("border-transparent", "border-orange-400");
+          tabRegister.classList.replace("text-gray-500", "text-white");
+          tabLogin.classList.replace("border-orange-400", "border-transparent");
+          tabLogin.classList.replace("text-white", "text-gray-500");
+          btnText.textContent = "Daftar Akun";
+        }
+      }
+
+      tabLogin.addEventListener("click", () => setMode(true));
+      tabRegister.addEventListener("click", () => setMode(false));
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        
+        if (!email || !password) return;
+
+        // Tampilkan loading
+        btnLoading.classList.remove("hidden");
+        errorMsg.classList.add("hidden");
+
+        let result;
+        if (isLoginMode) {
+          result = await signIn(email, password);
+        } else {
+          result = await signUp(email, password);
+        }
+
+        btnLoading.classList.add("hidden");
+
+        if (result.error) {
+          errorMsg.textContent = result.error.message;
+          errorMsg.classList.remove("hidden");
+        } else {
+          if (!isLoginMode && result.data?.user?.identities?.length === 0) {
+            errorMsg.textContent = "Email sudah terdaftar. Silakan masuk.";
+            errorMsg.classList.remove("hidden");
+          } else if (!isLoginMode) {
+             // Berhasil daftar & login
+             window.location.href = "index.html";
+          } else {
+             // Berhasil login
+             window.location.href = "index.html";
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

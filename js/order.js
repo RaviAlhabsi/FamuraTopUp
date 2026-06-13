@@ -572,17 +572,60 @@ function closeModal() {
   if (modal) modal.classList.remove("active");
 }
 
-function processOrder() {
+async function processOrder() {
   closeModal();
 
   // Generate a fake invoice number
   const invoiceNum = "INV" + Date.now().toString().slice(-10);
 
+  const state = window.orderState;
+  const item = state.selectedItem;
+  const payment = state.selectedPayment;
+  let total = item.price + payment.fee;
+  
+  if (state.promoDiscount > 0 && state.promoCode) {
+    const promoCodes = { "FAMURA10": "percent", "DISKON5K": "fixed", "NEWUSER": "percent" };
+    const type = promoCodes[state.promoCode] || "fixed";
+    if (type === "percent") {
+      total = Math.round(total - (total * state.promoDiscount / 100));
+    } else {
+      total = total - state.promoDiscount;
+    }
+    if (total < 0) total = 0;
+  }
+
+  // Save to Supabase if user is logged in
+  if (window.supabase) {
+    try {
+      const { data: { session } } = await window.supabase.auth.getSession();
+      if (session && session.user) {
+        await window.supabase.from("transactions").insert([{
+          user_id: session.user.id,
+          invoice: invoiceNum,
+          game: state.game.name,
+          item: item.name,
+          price: total,
+          status: "success", // Directly mark as success for demo purposes
+        }]);
+      }
+    } catch (e) {
+      console.error("Gagal menyimpan transaksi ke Supabase:", e);
+    }
+  }
+
   showToast(`Pesanan berhasil dibuat! Invoice: ${invoiceNum}`, "success");
 
   // In production, this would redirect to payment gateway
-  setTimeout(() => {
+  setTimeout(async () => {
     showToast("Mengarahkan ke halaman pembayaran...", "info");
+    
+    // Redirect to riwayat if logged in
+    if (window.supabase) {
+      const { data: { session } } = await window.supabase.auth.getSession();
+      if (session && session.user) {
+        window.location.href = "riwayat.html";
+      }
+    }
   }, 2000);
 }
 
