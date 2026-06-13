@@ -15,8 +15,8 @@ const GAMES = [
     developer: "Moonton",
     category: "mobile",
     popular: true,
-    icon: "assets/images/games/mobile-legends.svg",
-    banner: "assets/images/games/mobile-legends.svg",
+    icon: "assets/images/Gamelogo/mole.webp",
+    banner: "assets/images/Gamelogo/mole.webp",
     color: "#4F7CF7",
     fields: [
       { name: "userId", label: "User ID", placeholder: "Masukkan User ID", type: "text" },
@@ -46,8 +46,8 @@ const GAMES = [
     developer: "Garena",
     category: "mobile",
     popular: true,
-    icon: "assets/images/games/free-fire.svg",
-    banner: "assets/images/games/free-fire.svg",
+    icon: "assets/images/Gamelogo/free fire.jpg",
+    banner: "assets/images/Gamelogo/free fire.jpg",
     color: "#FF6B35",
     fields: [
       { name: "userId", label: "Player ID", placeholder: "Masukkan Player ID", type: "text" }
@@ -73,8 +73,8 @@ const GAMES = [
     developer: "Tencent",
     category: "mobile",
     popular: true,
-    icon: "assets/images/games/pubg-mobile.svg",
-    banner: "assets/images/games/pubg-mobile.svg",
+    icon: "assets/images/Gamelogo/pubg.jpg",
+    banner: "assets/images/Gamelogo/pubg.jpg",
     color: "#F5A623",
     fields: [
       { name: "userId", label: "Player ID", placeholder: "Masukkan Player ID", type: "text" }
@@ -97,8 +97,8 @@ const GAMES = [
     developer: "Riot Games",
     category: "pc",
     popular: true,
-    icon: "assets/images/games/valorant.svg",
-    banner: "assets/images/games/valorant.svg",
+    icon: "assets/images/Gamelogo/valorant.png",
+    banner: "assets/images/Gamelogo/valorant.png",
     color: "#FD4556",
     fields: [
       { name: "userId", label: "Riot ID", placeholder: "Contoh: Player#1234", type: "text" }
@@ -121,8 +121,8 @@ const GAMES = [
     developer: "HoYoverse",
     category: "mobile",
     popular: true,
-    icon: "assets/images/games/genshin-impact.svg",
-    banner: "assets/images/games/genshin-impact.svg",
+    icon: "assets/images/Gamelogo/ghensin.webp",
+    banner: "assets/images/Gamelogo/ghensin.webp",
     color: "#5EBCB3",
     fields: [
       { name: "userId", label: "UID", placeholder: "Masukkan UID", type: "text" },
@@ -147,8 +147,8 @@ const GAMES = [
     developer: "HoYoverse",
     category: "mobile",
     popular: true,
-    icon: "assets/images/games/honkai-star-rail.svg",
-    banner: "assets/images/games/honkai-star-rail.svg",
+    icon: "assets/images/Gamelogo/Honkai_Star_Rail.webp",
+    banner: "assets/images/Gamelogo/Honkai_Star_Rail.webp",
     color: "#C4A3FF",
     fields: [
       { name: "userId", label: "UID", placeholder: "Masukkan UID", type: "text" },
@@ -173,8 +173,8 @@ const GAMES = [
     developer: "TiMi Studio",
     category: "mobile",
     popular: false,
-    icon: "assets/images/games/honor-of-kings.svg",
-    banner: "assets/images/games/honor-of-kings.svg",
+    icon: "assets/images/Gamelogo/honor of kings.webp",
+    banner: "assets/images/Gamelogo/honor of kings.webp",
     color: "#FFD700",
     fields: [
       { name: "userId", label: "Player ID", placeholder: "Masukkan Player ID", type: "text" }
@@ -196,8 +196,8 @@ const GAMES = [
     developer: "Activision",
     category: "mobile",
     popular: false,
-    icon: "assets/images/games/codm.svg",
-    banner: "assets/images/games/codm.svg",
+    icon: "assets/images/Gamelogo/Call of duty mobile.jpg",
+    banner: "assets/images/Gamelogo/Call of duty mobile.jpg",
     color: "#4CAF50",
     fields: [
       { name: "userId", label: "Player ID", placeholder: "Masukkan Player ID", type: "text" }
@@ -219,8 +219,8 @@ const GAMES = [
     developer: "Roblox Corp.",
     category: "pc",
     popular: false,
-    icon: "assets/images/games/roblox.svg",
-    banner: "assets/images/games/roblox.svg",
+    icon: "assets/images/Gamelogo/Roblox_Logo.jpg",
+    banner: "assets/images/Gamelogo/Roblox_Logo.jpg",
     color: "#E2231A",
     fields: [
       { name: "userId", label: "Username", placeholder: "Masukkan Username Roblox", type: "text" }
@@ -242,8 +242,8 @@ const GAMES = [
     developer: "Valve",
     category: "voucher",
     popular: true,
-    icon: "assets/images/games/steam.svg",
-    banner: "assets/images/games/steam.svg",
+    icon: "assets/images/Gamelogo/steam wallet.webp",
+    banner: "assets/images/Gamelogo/steam wallet.webp",
     color: "#1B2838",
     fields: [],
     helpText: "Kode voucher akan dikirimkan via WhatsApp setelah pembayaran.",
@@ -265,8 +265,8 @@ const GAMES = [
     developer: "Garena",
     category: "voucher",
     popular: false,
-    icon: "assets/images/games/garena-shell.svg",
-    banner: "assets/images/games/garena-shell.svg",
+    icon: "assets/images/Gamelogo/garena shell.png",
+    banner: "assets/images/Gamelogo/garena shell.png",
     color: "#FF5722",
     fields: [],
     helpText: "Kode voucher akan dikirimkan via WhatsApp setelah pembayaran.",
@@ -286,8 +286,8 @@ const GAMES = [
     developer: "TiMi Studio",
     category: "mobile",
     popular: false,
-    icon: "assets/images/games/aov.svg",
-    banner: "assets/images/games/aov.svg",
+    icon: "assets/images/Gamelogo/arena-of-valor-aov.png",
+    banner: "assets/images/Gamelogo/arena-of-valor-aov.png",
     color: "#2196F3",
     fields: [
       { name: "userId", label: "Player ID", placeholder: "Masukkan Player ID", type: "text" }
@@ -375,22 +375,9 @@ function getGameBySlug(slug) {
 }
 
 // ─── Helper: Game SVG Icons (inline) ────────────────────────
-// Since we don't have actual game logos, we generate attractive
-// gradient icon placeholders with the game's initial letter
+// Now uses actual game logos!
 function getGameIconSVG(game) {
-  const initial = game.name.charAt(0);
-  const color = game.color;
-  return `
-    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-      <defs>
-        <linearGradient id="grad-${game.slug}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:${color};stop-opacity:1" />
-          <stop offset="100%" style="stop-color:${color}88;stop-opacity:1" />
-        </linearGradient>
-      </defs>
-      <rect width="80" height="80" rx="16" fill="url(#grad-${game.slug})"/>
-      <text x="40" y="52" text-anchor="middle" font-size="36" font-weight="700" fill="white" font-family="Inter, sans-serif">${initial}</text>
-    </svg>`;
+  return `<img src="${game.icon}" alt="${game.name}" class="w-full h-full object-cover">`;
 }
 
 // ─── Helper: Payment Icon SVGs ──────────────────────────────
