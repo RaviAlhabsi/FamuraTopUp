@@ -6,9 +6,9 @@
  * ============================================================
  */
 
-// GANTI URL INI DENGAN SUPABASE PROJECT URL KAMU (contoh: https://xyz.supabase.co)
-const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co"; 
-const SUPABASE_ANON_KEY = "sb_publishable_zzwL0Y3qTKHokdU4hhp5Ew_ugVzpxJz";
+// Supabase Configuration
+const SUPABASE_URL = "https://ysepkpsdbtmnknfzghjo.supabase.co"; 
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZXBrcHNkYnRtbmtuZnpnaGpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzQ2MTQsImV4cCI6MjA5NjkxMDYxNH0.BOtIHKg1GUJPXdOjtd-C0uDaNb1I5O80xv5SrEt6YM4";
 
 // Inisialisasi Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
