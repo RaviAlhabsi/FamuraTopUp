@@ -47,7 +47,6 @@
       <div class="hidden md:flex items-center gap-6">
         <a href="index.html" class="nav-link">Beranda</a>
         <a href="cek-transaksi.html" class="nav-link active">Cek Transaksi</a>
-        <a href="index.html#katalog" class="nav-link">Daftar Harga</a>
         <a href="login.html" class="nav-link">Masuk</a>
       </div>
       <div class="flex items-center gap-3">
@@ -200,7 +199,7 @@
 
       if (!btn || !input || !resultContainer) return;
 
-      function doSearch() {
+      async function doSearch() {
         const query = input.value.trim().toUpperCase();
         if (!query) {
           showPageToast("Masukkan nomor invoice!", "error");
@@ -216,11 +215,32 @@
           </div>
         `;
 
-        // Simulate API delay
-        setTimeout(() => {
-          const tx = DUMMY_TRANSACTIONS.find(t => t.invoice === query);
+        try {
+          if (!window.supabaseClient) throw new Error("Supabase Client belum siap");
 
-          if (tx) {
+          const { data, error } = await window.supabaseClient
+            .from("transactions")
+            .select("*")
+            .eq("invoice", query)
+            .single();
+
+          if (error && error.code !== "PGRST116") { // PGRST116 is "No rows found"
+            throw error;
+          }
+
+          if (data) {
+            // Mapping format
+            const tx = {
+              invoice: data.invoice,
+              game: data.game,
+              item: data.item,
+              price: data.price,
+              status: data.status,
+              date: new Date(data.created_at).toLocaleString('id-ID', {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit'
+              })
+            };
             renderInvoiceResult(tx, resultContainer);
           } else {
             resultContainer.innerHTML = `
@@ -231,7 +251,15 @@
               </div>
             `;
           }
-        }, 1000);
+        } catch (err) {
+          console.error("Error searching invoice:", err);
+          showPageToast("Gagal mencari transaksi. Coba lagi.", "error");
+          resultContainer.innerHTML = `
+              <div class="step-section text-center py-8">
+                <p class="text-red-400">Terjadi kesalahan saat mencari. Silakan coba lagi.</p>
+              </div>
+            `;
+        }
       }
 
       btn.addEventListener("click", doSearch);
@@ -249,6 +277,9 @@
         failed: { label: "Gagal", color: "failed", icon: "❌" },
       };
       const status = statusConfig[tx.status] || statusConfig.pending;
+
+      // formatRupiah from data.js
+      const formatter = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
 
       container.innerHTML = `
         <div class="step-section animate-scale-in" style="opacity:0">
@@ -274,7 +305,7 @@
             </div>
             <div class="flex justify-between items-center py-2 border-b border-gray-700/30">
               <span class="text-sm text-gray-400">Harga</span>
-              <span class="text-sm font-bold gradient-text">${formatRupiah(tx.price)}</span>
+              <span class="text-sm font-bold gradient-text">${formatter.format(tx.price)}</span>
             </div>
             <div class="flex justify-between items-center py-2">
               <span class="text-sm text-gray-400">Tanggal</span>
@@ -300,7 +331,7 @@
 
 
     // ─── Render Recent Transactions Table ────────────────────
-    function renderRecentTransactions() {
+    async function renderRecentTransactions() {
       const tbody = document.getElementById("tx-table-body");
       if (!tbody) return;
 
@@ -310,23 +341,52 @@
         failed: { label: "Gagal", class: "failed" },
       };
 
-      tbody.innerHTML = DUMMY_TRANSACTIONS.map(tx => {
-        const status = statusConfig[tx.status] || statusConfig.pending;
-        // Mask invoice: show first 6 and last 3 chars
-        const maskedInvoice = tx.invoice.substring(0, 6) + "***" + tx.invoice.slice(-3);
-        return `
-          <tr>
-            <td class="text-gray-400">${tx.date}</td>
-            <td class="font-mono text-sm">${maskedInvoice}</td>
-            <td>
-              <div class="font-medium">${tx.game}</div>
-              <div class="text-xs text-gray-500">${tx.item}</div>
-            </td>
-            <td class="font-semibold text-orange-400">${formatRupiah(tx.price)}</td>
-            <td><span class="status-badge ${status.class}">${status.label}</span></td>
-          </tr>
-        `;
-      }).join("");
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400"><div class="inline-block w-6 h-6 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div></td></tr>`;
+
+      try {
+        if (!window.supabaseClient) throw new Error("Supabase Client belum siap");
+
+        const { data, error } = await window.supabaseClient
+          .from("transactions")
+          .select("invoice, game, item, price, status, created_at")
+          .order("created_at", { ascending: false })
+          .limit(10);
+
+        if (error) throw error;
+
+        const formatter = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
+
+        if (!data || data.length === 0) {
+           tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400">Belum ada transaksi terbaru</td></tr>`;
+           return;
+        }
+
+        tbody.innerHTML = data.map(tx => {
+          const status = statusConfig[tx.status] || statusConfig.pending;
+          const maskedInvoice = tx.invoice.substring(0, 6) + "***" + tx.invoice.slice(-3);
+          const date = new Date(tx.created_at).toLocaleString('id-ID', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit'
+          });
+
+          return `
+            <tr>
+              <td class="text-gray-400">${date}</td>
+              <td class="font-mono text-sm">${maskedInvoice}</td>
+              <td>
+                <div class="font-medium">${tx.game}</div>
+                <div class="text-xs text-gray-500">${tx.item}</div>
+              </td>
+              <td class="font-semibold text-orange-400">${formatter.format(tx.price)}</td>
+              <td><span class="status-badge ${status.class}">${status.label}</span></td>
+            </tr>
+          `;
+        }).join("");
+
+      } catch (err) {
+        console.error("Gagal memuat transaksi terbaru:", err);
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-400">Gagal memuat data transaksi terbaru.</td></tr>`;
+      }
     }
 
 
