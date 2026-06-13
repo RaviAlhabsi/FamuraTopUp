@@ -349,19 +349,7 @@ const PAYMENT_METHODS = [
 ];
 
 
-// ─── Dummy Transactions (untuk demo Cek Transaksi) ──────────
-const DUMMY_TRANSACTIONS = [
-  { invoice: "INV20260604001", game: "Mobile Legends", item: "514 Diamonds", price: 106000, status: "success", date: "2026-06-04 12:30" },
-  { invoice: "INV20260604002", game: "Free Fire", item: "520 Diamonds", price: 73000, status: "pending", date: "2026-06-04 12:15" },
-  { invoice: "INV20260604003", game: "PUBG Mobile", item: "660 UC", price: 140000, status: "success", date: "2026-06-04 11:50" },
-  { invoice: "INV20260604004", game: "Valorant", item: "1375 VP", price: 140000, status: "failed", date: "2026-06-04 11:30" },
-  { invoice: "INV20260604005", game: "Genshin Impact", item: "Welkin Moon", price: 79000, status: "success", date: "2026-06-04 11:00" },
-  { invoice: "INV20260603001", game: "Mobile Legends", item: "1412 Diamonds", price: 271000, status: "success", date: "2026-06-03 21:40" },
-  { invoice: "INV20260603002", game: "Steam Wallet", item: "IDR 120.000", price: 134000, status: "success", date: "2026-06-03 20:15" },
-  { invoice: "INV20260603003", game: "Honkai: Star Rail", item: "Express Supply Pass", price: 79000, status: "pending", date: "2026-06-03 19:50" },
-  { invoice: "INV20260603004", game: "Free Fire", item: "1060 Diamonds", price: 145000, status: "success", date: "2026-06-03 18:30" },
-  { invoice: "INV20260603005", game: "Roblox", item: "800 Robux", price: 140000, status: "success", date: "2026-06-03 17:00" },
-];
+// Dummy Transactions dihapus karena sudah menggunakan Supabase
 
 
 // ─── Helper: Format Rupiah ──────────────────────────────────
