@@ -40,11 +40,16 @@ async function getCurrentUser() {
 /**
  * Register
  */
-async function signUp(email, password) {
+async function signUp(email, password, username) {
   if (!supabaseClient) return { data: null, error: { message: "Supabase belum siap. Coba muat ulang halaman." } };
   const { data, error } = await supabaseClient.auth.signUp({
     email: email,
     password: password,
+    options: {
+      data: {
+        username: username
+      }
+    }
   });
   return { data, error };
 }

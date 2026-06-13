@@ -29,7 +29,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F97316'/><text x='16' y='22' text-anchor='middle' font-size='18' font-weight='bold' fill='white'>F</text></svg>">
   
   <!-- Supabase Script -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase-js.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 
 <body class="font-inter min-h-screen flex flex-col items-center justify-center relative px-4" style="background-image: radial-gradient(circle at top right, rgba(249,115,22,0.1), transparent 40%), radial-gradient(circle at bottom left, rgba(59,130,246,0.1), transparent 40%);">
@@ -55,6 +55,15 @@
     <form id="auth-form" class="space-y-5">
       <div id="error-msg" class="hidden p-3 rounded-lg bg-red-500/20 text-red-400 text-sm border border-red-500/30 text-center"></div>
       
+      <!-- Tambahan untuk mode Daftar: Username -->
+      <div id="username-container" class="hidden">
+        <label class="block text-sm font-medium text-gray-300 mb-2">Username</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">👤</span>
+          <input id="username" type="text" class="form-input pl-12" placeholder="Nama Panggilan">
+        </div>
+      </div>
+
       <div>
         <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
         <div class="relative">
@@ -68,6 +77,15 @@
         <div class="relative">
           <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">🔒</span>
           <input id="password" type="password" class="form-input pl-12" placeholder="••••••••" required minlength="6">
+        </div>
+      </div>
+
+      <!-- Tambahan untuk mode Daftar: Konfirmasi Password -->
+      <div id="confirm-password-container" class="hidden">
+        <label class="block text-sm font-medium text-gray-300 mb-2">Konfirmasi Password</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">🔒</span>
+          <input id="confirm-password" type="password" class="form-input pl-12" placeholder="••••••••" minlength="6">
         </div>
       </div>
 
@@ -95,8 +113,14 @@
       const btnText = document.getElementById("btn-text");
       const errorMsg = document.getElementById("error-msg");
       const form = document.getElementById("auth-form");
+      
+      const usernameContainer = document.getElementById("username-container");
+      const usernameInput = document.getElementById("username");
       const emailInput = document.getElementById("email");
       const passwordInput = document.getElementById("password");
+      const confirmPasswordContainer = document.getElementById("confirm-password-container");
+      const confirmPasswordInput = document.getElementById("confirm-password");
+      
       const btnLoading = document.getElementById("btn-loading");
 
       let isLoginMode = true;
@@ -104,18 +128,35 @@
       function setMode(login) {
         isLoginMode = login;
         errorMsg.classList.add("hidden");
+        // Reset validasi manual
+        errorMsg.style.background = "";
+        errorMsg.style.borderColor = "";
+        errorMsg.style.color = "";
+        
         if (login) {
           tabLogin.classList.replace("border-transparent", "border-orange-400");
           tabLogin.classList.replace("text-gray-500", "text-white");
           tabRegister.classList.replace("border-orange-400", "border-transparent");
           tabRegister.classList.replace("text-white", "text-gray-500");
           btnText.textContent = "Masuk";
+          
+          // Sembunyikan field tambahan
+          usernameContainer.classList.add("hidden");
+          confirmPasswordContainer.classList.add("hidden");
+          usernameInput.required = false;
+          confirmPasswordInput.required = false;
         } else {
           tabRegister.classList.replace("border-transparent", "border-orange-400");
           tabRegister.classList.replace("text-gray-500", "text-white");
           tabLogin.classList.replace("border-orange-400", "border-transparent");
           tabLogin.classList.replace("text-white", "text-gray-500");
           btnText.textContent = "Daftar Akun";
+          
+          // Tampilkan field tambahan
+          usernameContainer.classList.remove("hidden");
+          confirmPasswordContainer.classList.remove("hidden");
+          usernameInput.required = true;
+          confirmPasswordInput.required = true;
         }
       }
 
@@ -127,8 +168,24 @@
         
         const email = emailInput.value.trim();
         const password = passwordInput.value;
+        const username = usernameInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value;
         
         if (!email || !password) return;
+        
+        // Validasi saat daftar
+        if (!isLoginMode) {
+          if (password !== confirmPassword) {
+            errorMsg.textContent = "Password dan konfirmasi password tidak sama!";
+            errorMsg.classList.remove("hidden");
+            return;
+          }
+          if (!username) {
+            errorMsg.textContent = "Username tidak boleh kosong!";
+            errorMsg.classList.remove("hidden");
+            return;
+          }
+        }
 
         // Tampilkan loading
         btnLoading.classList.remove("hidden");
@@ -139,7 +196,7 @@
           if (isLoginMode) {
             result = await signIn(email, password);
           } else {
-            result = await signUp(email, password);
+            result = await signUp(email, password, username);
           }
 
           btnLoading.classList.add("hidden");
