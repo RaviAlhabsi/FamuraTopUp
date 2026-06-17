@@ -216,9 +216,9 @@
         `;
 
         try {
-          if (!window.supabaseClient) throw new Error("Supabase Client belum siap");
+          if (!supabaseClient) throw new Error("Supabase Client belum siap");
 
-          const { data, error } = await window.supabaseClient
+          const { data, error } = await supabaseClient
             .from("transactions")
             .select("*")
             .eq("invoice", query)
@@ -344,9 +344,9 @@
       tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400"><div class="inline-block w-6 h-6 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div></td></tr>`;
 
       try {
-        if (!window.supabaseClient) throw new Error("Supabase Client belum siap");
+        if (!supabaseClient) throw new Error("Supabase Client belum siap");
 
-        const { data, error } = await window.supabaseClient
+        const { data, error } = await supabaseClient
           .from("transactions")
           .select("invoice, game, item, price, status, created_at")
           .order("created_at", { ascending: false })
