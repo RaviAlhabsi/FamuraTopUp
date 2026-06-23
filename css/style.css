@@ -10,7 +10,7 @@
 
 /* ─── CSS Custom Properties (Design Tokens) ─────────────── */
 :root {
-  --bg-primary: #0F1119;
+  --bg-primary:#141722;
   --bg-secondary: #141722;
   --bg-card: #1A1D2E;
   --bg-card-hover: #242838;
