@@ -8,6 +8,7 @@
 /* ─── Google Fonts Import ──────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
+
 /* ─── CSS Custom Properties (Design Tokens) ─────────────── */
 :root {
   --bg-primary:#141722;
@@ -50,6 +51,7 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/*Ganti Warna Backgorund*/
 body {
   font-family: var(--font-main);
   background-color: var(--bg-primary);
@@ -57,6 +59,11 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100vh;
+  
+/* menganti semua font secara trpisah
+*, body, html, .font-sans {
+  font-family: var(--font-main) !important;
+} */
 }
 
 /* Custom scrollbar */
@@ -135,7 +142,7 @@ body {
 .stagger-7 { animation-delay: 0.35s; }
 .stagger-8 { animation-delay: 0.4s; }
 
-/* ─── Navbar ────────────────────────────────────────────── */
+/* ─── Navbar dan ganti warna bagian paling atas ────────────────────────────────────────────── */
 .navbar {
   background: rgba(15, 17, 25, 0.85);
   backdrop-filter: blur(20px);
@@ -144,24 +151,26 @@ body {
   transition: var(--transition);
   z-index: 1000;
 }
-
+/* untuk navbar jika di scrol nanti bakal ganti warna otomatis*/
 .navbar.scrolled {
   background: rgba(15, 17, 25, 0.95);
   box-shadow: 0 4px 30px rgba(0,0,0,0.4);
 }
 
+/*Ganti Warna Cek Transaksi profile riwayat Masuk*/
 .nav-link {
   position: relative;
   color: var(--text-secondary);
   transition: var(--transition);
   font-weight: 500;
 }
-
+/*Ganti Warna Beranda*/
 .nav-link:hover,
 .nav-link.active {
   color: var(--accent-orange);
 }
 
+/*ganti aksen warna garis di bagian paling atas*/
 .nav-link::after {
   content: '';
   position: absolute;
@@ -304,7 +313,7 @@ body {
   background: linear-gradient(90deg, var(--accent-orange), var(--accent-orange-light));
 }
 
-/* ─── Game Cards ─────────────────────────────────────────── */
+/* ─── Game Cards dan ganti warna background game cards ─────────────────────────────────────────── */
 .game-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -320,8 +329,10 @@ body {
   padding: 16px 12px;
   gap: 10px;
   position: relative;
+  
 }
 
+/*ganti warna saat cursore arah ke card game*/
 .game-card:hover {
   border-color: var(--accent-orange);
   transform: translateY(-4px);
@@ -330,13 +341,14 @@ body {
 }
 
 .game-card-icon {
-  width: 64px;
+  width: 1px;
   height: 64px;
   border-radius: var(--radius-md);
   overflow: hidden;
   flex-shrink: 0;
 }
 
+/*ukuran gambar game*/
 @media (min-width: 768px) {
   .game-card-icon {
     width: 72px;
@@ -344,6 +356,7 @@ body {
   }
 }
 
+/*ubah warna nama game*/
 .game-card-name {
   font-size: 0.8rem;
   font-weight: 600;
@@ -352,13 +365,14 @@ body {
   color: var(--text-primary);
 }
 
+/*ubah warna dibawah nama game di bawahnya*/
 .game-card-dev {
   font-size: 0.7rem;
   color: var(--text-muted);
   text-align: center;
 }
 
-/* ─── Category Tabs ──────────────────────────────────────── */
+/* ─── Category Tabs dan ubah di bagian semua,gamemobile,game pc,voucher*/ ──────────────────────────────────────── */
 .category-tab {
   padding: 8px 20px;
   border-radius: 50px;
@@ -384,7 +398,7 @@ body {
   box-shadow: var(--shadow-glow-orange);
 }
 
-/* ─── Section Headers ────────────────────────────────────── */
+/* ─── Section Headers dan ubah warna di bagian game populer, semua layanan,kenapa famuratopup ────────────────────────────────────── */
 .section-title {
   font-size: 1.25rem;
   font-weight: 700;
@@ -729,12 +743,13 @@ body {
   backdrop-filter: blur(4px);
 }
 
-/* ─── Footer ─────────────────────────────────────────────── */
+/* ─── Footer ubah warna bg yang paling bawah ─────────────────────────────────────────────── */
 .footer {
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
 }
 
+/*ubah warna text yang paling bawah*/
 .footer-link {
   color: var(--text-secondary);
   text-decoration: none;
@@ -781,8 +796,8 @@ body {
   border-radius: inherit;
   padding: 1px;
   background: linear-gradient(135deg, var(--accent-orange), var(--accent-blue));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
+  --webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  --webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
 }
@@ -874,6 +889,7 @@ body {
   border-collapse: collapse;
 }
 
+/*ubah di bagian tanggal invoice cek transaksi*/
 .tx-table th {
   padding: 12px 14px;
   text-align: left;
@@ -886,6 +902,7 @@ body {
   white-space: nowrap;
 }
 
+/*ubah di bagian cek transaksi*/
 .tx-table td {
   padding: 12px 14px;
   font-size: 0.85rem;
