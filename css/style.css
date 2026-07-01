@@ -142,7 +142,7 @@ body {
 .stagger-7 { animation-delay: 0.35s; }
 .stagger-8 { animation-delay: 0.4s; }
 
-/* ─── Navbar dan ganti warna bagian paling atas ────────────────────────────────────────────── */
+/* ─── Navbar dan ganti warna bacground bagian paling atas ────────────────────────────────────────────── */
 .navbar {
   background: rgba(15, 17, 25, 0.85);
   backdrop-filter: blur(20px);
@@ -151,7 +151,7 @@ body {
   transition: var(--transition);
   z-index: 1000;
 }
-/* untuk navbar jika di scrol nanti bakal ganti warna otomatis*/
+/* untuk ganti warna background jika di scrol tetap ada*/
 .navbar.scrolled {
   background: rgba(15, 17, 25, 0.95);
   box-shadow: 0 4px 30px rgba(0,0,0,0.4);
@@ -442,7 +442,7 @@ body {
   color: var(--text-primary);
 }
 
-/* ─── Form Inputs ────────────────────────────────────────── */
+/* ─── Form Inputs untuk ngisi serch atau login ubah warna ────────────────────────────────────────── */
 .form-input {
   width: 100%;
   padding: 12px 16px;
